@@ -10,7 +10,7 @@
   },
   "engines": {
     "node": "8.1"
-  }
+  },
   "author": "Abhijit Kalta",
   "license": "ISC",
   "dependencies": {

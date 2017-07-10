@@ -1,3 +1,4 @@
+require('./config/config');
 const express = require('express');
 const hbs = require('hbs');
 const bodyParser = require('body-parser');
@@ -5,12 +6,12 @@ const path = require('path');
 const mongoose = require('mongoose');
 const routes = require('./routes/routes');
 
-const port = process.env.PORT || 3050;
+const port = process.env.PORT ;
 mongoose.Promise = global.Promise;
 
 var app = express();
 if(process.env.NODE_ENV !== 'test'){
-  mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/kuber');
+  mongoose.connect(process.env.MONGODB_URI);
 }
 
 app.set('view engine', 'html');

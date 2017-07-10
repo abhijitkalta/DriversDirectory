@@ -14,7 +14,8 @@ before((done) => {
 
 beforeEach((done) => {
   const {drivers} = mongoose.connection.collections;
-  drivers.drop(() => {
-    done();
-  })
+  drivers.drop()
+  .then(() =>  drivers.ensureIndex({'geometry.coordinates' : '2dsphere'})) //since test db is dropped everytime, index needs to be recreated or else it only be initialised once
+  .then(() => done())
+  .catch(() => done());
 });

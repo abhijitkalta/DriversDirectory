@@ -43,5 +43,21 @@ module.exports = {
       });
     })
     .catch(next);
+  },
+
+  index(req, res, next){
+    const {lng, lat} = req.query;
+
+    Driver.geoNear({
+      type: 'Point',
+      coordinates: [parseFloat(lng), parseFloat(lat)]  //since express considers them as strings or else 'must be point' Error will be thrown
+    }, {
+      spherical: true,
+      maxDistance: 200000
+    })
+    .then((drivers) => {
+      res.status(200).send(drivers);
+    })
+    .catch(next);
   }
 }

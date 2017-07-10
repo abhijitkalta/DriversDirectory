@@ -44,7 +44,7 @@ describe('Test drivers api', () => {
     })
   });
 
-  it('Delete to api/drivers/:id', (done) => {
+  it('Deletes driver at api/drivers/:id', (done) => {
     const driver = new Driver({
       email: 'test@example.com',
       driving: false
@@ -68,4 +68,35 @@ describe('Test drivers api', () => {
     })
 
   });
+
+  it('Gets all drivers based on lat and long', (done) => {
+    const qDriver = new Driver({
+      email: 'qDriver@test.com',
+      driving: true,
+      geometry: {
+        type: 'Point',
+        coordinates: [-80.1, 25.5]
+      }
+    });
+
+    const sDriver = new Driver({
+      email: 'sDriver@test.com',
+      driving: true,
+      geometry: {
+        type: 'Point',
+        coordinates: [-122.1, 47.14]
+      }
+    });
+
+    Promise.all([qDriver.save(), sDriver.save()])
+    .then((drivers) => {
+      request(server)
+      .get('/api/drivers?lng=-80&lat=25')
+      .end((err, res) => {
+        expect(res.body.length).to.equal(1);
+        expect(res.body[0].obj.email).to.equal('qDriver@test.com');
+        done();
+      })
+    })
+  })
 })

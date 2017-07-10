@@ -8,6 +8,9 @@
     "start": "node server.js",
     "test-watch": "NODE_ENV=test nodemon --exec 'npm test'"
   },
+  "engines": {
+    "node": "8.1"
+  }
   "author": "Abhijit Kalta",
   "license": "ISC",
   "dependencies": {

@@ -10,7 +10,7 @@ mongoose.Promise = global.Promise;
 
 var app = express();
 if(process.env.NODE_ENV !== 'test'){
-  mongoose.connect('mongodb://localhost/kuber');
+  mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/kuber');
 }
 
 app.set('view engine', 'html');

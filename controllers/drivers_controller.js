@@ -26,10 +26,21 @@ module.exports = {
   edit(req, res, next){
     const id = req.params.id;
     const driverProps = req.body;
-    driver.update({_id: id}, driverProps)
-    .then(() => findById(id))
+    Driver.findByIdAndUpdate({_id: id}, driverProps)
+    .then(() => Driver.findById(id))
     .then((driver) => {
       res.status(200).send(driver);
+    })
+    .catch(next);
+  },
+
+  delete(req, res, next){
+    const id = req.params.id;
+    Driver.findByIdAndRemove(id)
+    .then((driver) => {
+      res.status(204).send({
+        message: "Successfully Deleted!!"
+      });
     })
     .catch(next);
   }

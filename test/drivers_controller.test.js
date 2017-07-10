@@ -4,8 +4,8 @@ const server = require('../server.js').app;
 const mongoose = require('mongoose');
 
 const Driver = mongoose.model('driver');
-describe('POST /api/drivers', () => {
-  it('respond with json', (done) => {
+describe('Test drivers api', () => {
+  it('POST to api/drivers', (done) => {
     Driver.count()
     .then((count) => {
       request(server)
@@ -21,5 +21,51 @@ describe('POST /api/drivers', () => {
           })
         });
     })
+  });
+
+  it('PUT to api/drivers/:id', (done) => {
+    const driver = new Driver({
+      email: 'test@example.com',
+      driving: false
+    });
+
+    driver.save()
+    .then(() => {
+      request(server)
+      .put('/api/drivers/' + driver._id)
+      .send({driving: true})
+      .end(() => {
+        Driver.findById(driver._id)
+        .then((driver) => {
+          expect(driver.driving).to.equal(true);
+          done();
+        })
+      })
+    })
+  });
+
+  it('Delete to api/drivers/:id', (done) => {
+    const driver = new Driver({
+      email: 'test@example.com',
+      driving: false
+    });
+
+    driver.save()
+    .then(() => {
+      Driver.count()
+      .then((count) => {
+        request(server)
+          .del('/api/drivers/' + driver._id)
+          .expect(200)
+          .end(() => {
+            Driver.count()
+            .then((newCount) => {
+              expect(count).to.equal(newCount + 1);
+              done();
+            })
+          });
+      })
+    })
+
   });
 })
